@@ -1,0 +1,9 @@
+.shipping-item {
+  margin-bottom: 10px; /* Espacio entre filas */
+  font-size: 1.2em;
+}
+
+.type {
+  margin-right: 20px; /* <--- AQUÍ ESTÁ EL ESPACIO QUE BUSCAS */
+  font-weight: bold;
+}
