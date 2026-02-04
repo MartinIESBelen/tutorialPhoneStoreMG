@@ -1,37 +1,33 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router'; // Para leer la URL
-import { Product, products } from '../products';  //Importamos los datos
-import { CartService} from '../cart.service';
-
+import { ActivatedRoute} from '@angular/router';
+import {CommonModule} from '@angular/common'; //necesario para el pipe de moneda
+import {Product, products} from '../products';
+import {CartService} from '../cart.service';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './product-details.html',
-  styleUrls: ['./product-details.css']
+  styleUrl: './product-details.css',
 })
-export class ProductDetails implements OnInit {
-  // Aquí guardaremos el móvil encontrado
+export class ProductDetails {
+
   product: Product | undefined;
 
-  cartService = inject(CartService);
-
-  // Inyectamos la ruta para poder usarla
-  constructor(private route: ActivatedRoute) { }
+  private route = inject(ActivatedRoute);
+  private cart = inject(CartService);
 
   ngOnInit() {
-    // Obtenemos el id de la url
+    //cogemos la id desde la url
     const routeParams = this.route.snapshot.paramMap;
     const productIdFromRoute = Number(routeParams.get('productId'));
 
-    // Buscamos el producto en la lista que coincida con ese id
-    this.product = products.find(product => product.id === productIdFromRoute);
+    this.product = products.find(product => product.id === productIdFromRoute)
   }
 
   addToCart(product: Product) {
-    this.cartService.addToCart(product);
-    window.alert('Your product has been added to the cart!');
+    this.cart.addToCart(product)
+    window.alert(`Product added to cart: ${product.id}`);
   }
 }

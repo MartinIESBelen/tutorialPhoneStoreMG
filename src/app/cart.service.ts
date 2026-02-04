@@ -25,6 +25,8 @@ export class CartService {
   }
 
   getShippingPrices(){
+    // Angular usa "Observables" (flujos de datos).
+    // Le decimos: "Ve a esa URL y tráeme una lista de objetos con type y price (sus campos)"
     return this.http.get<{type: string, price: number}[]>('/shipping.json');
   }
 

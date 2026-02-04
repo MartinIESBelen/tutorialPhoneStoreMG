@@ -2,30 +2,48 @@ import { Component, inject } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CartService} from '../cart.service';
 import {RouterLink} from '@angular/router';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
+  standalone: true,
   imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
 export class Cart {
-cartService = inject(CartService);
+  private cartService = inject(CartService);
+  private formBuilder = inject(FormBuilder);
 
-formBuilder = inject(FormBuilder);
+  items = this.cartService.getItems();
 
-items = this.cartService.getItems();
+  checkoutForm = this.formBuilder.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
+    address: ['', Validators.required]
+  });
 
-checkoutForm = this.formBuilder.group({
-  name:'',
-  email:'',
-});
+  cleanCart(){
+    this.items = this.cartService.clearCart();
+    return this.items;
+    window.alert('Cart has beeb cleared!');
+  }
 
-onSubmit(): void {
-  this.items = this.cartService.clearCart();
-  console.warn('Your order has been submited', this.checkoutForm.value);
+  onSubmit(){
+    if(this.checkoutForm.invalid){
+      this.checkoutForm.markAllAsTouched()
+      return;
+    }
 
-  this.checkoutForm.reset();
-}
+    if(this.items.length === 0){
+      window.alert('The cart is empty!')
+      return;
+    }
+
+    this.items= this.cartService.clearCart()
+    console.warn('Your order has been submitted!', this.checkoutForm.value)
+    window.alert(`Thanks for buying ${this.checkoutForm.value.name} !`)
+
+    this.checkoutForm.reset()
+  }
+
 }

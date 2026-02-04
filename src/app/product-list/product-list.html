@@ -1,20 +1,26 @@
 <h2>Products</h2>
 
-@for (product of products; track product.id) {
-
-  <div class="product-container">
+@for (product of products; track product.name) {
+  <div>
     <h3>
-      <a [title]="product.name + ' details'" [routerLink]="['/products', product.id]">
+      <a [routerLink]="['/products', product.id]" [title]="product.name + ' details'">
         {{ product.name }}
       </a>
     </h3>
 
     @if (product.description) {
-      <p>Description: {{ product.description }}</p>
+      <p>
+        Description: {{ product.description }}
+      </p>
     }
 
     <button type="button" (click)="share()">
       Share
     </button>
+
+    <app-product-alerts
+      [product]="product"
+      (notify)="onNotify()">
+    </app-product-alerts>
   </div>
 }

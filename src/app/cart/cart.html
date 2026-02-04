@@ -1,14 +1,20 @@
 <h3>Cart</h3>
 
 <p>
-  <a routerLink="/shipping" class="button fancy-button">Shipping Prices</a>
+  <a [routerLink]="['/shipping']">Shipping Prices</a>
 </p>
 
-@for (item of items; track item.id) {
-  <div class="cart-item">
-    <span>{{ item.name }}</span>
-    <span>{{ item.price | currency }}</span>
-  </div>
+<div class="cart-item">
+  @for (item of items; track item.name) {
+    <div class="item-row">
+      <span>{{ item.name }}</span>
+      <span>{{ item.price | currency }}</span>
+    </div>
+  }
+
+</div>
+@if (items.length > 0) {
+  <button type="button" (click)="cleanCart()" style="margin-bottom: 20px;">Clean Cart</button>
 }
 
 <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
@@ -16,11 +22,26 @@
   <div>
     <label for="name">Name</label>
     <input id="name" type="text" formControlName="name">
+
+    @if (checkoutForm.get('name')?.invalid && checkoutForm.get('name')?.touched) {
+      <div>
+        @if (checkoutForm.get('name')?.hasError('required')) {
+          <span class="error-message">Name is required.</span>
+        }
+        @if (checkoutForm.get('name')?.hasError('minlength')) {
+          <span class="error-message">Name must be at least 3 characters long.</span>
+        }
+      </div>
+    }
   </div>
 
   <div>
     <label for="address">Address</label>
     <input id="address" type="text" formControlName="address">
+
+    @if (checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched) {
+      <span class="error-message">Address is required.</span>
+    }
   </div>
 
   <button class="button" type="submit">Purchase</button>

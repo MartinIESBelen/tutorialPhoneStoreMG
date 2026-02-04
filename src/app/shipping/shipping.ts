@@ -1,24 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs'; // Importamos Observable
-import { CartService } from '../cart.service';
+import {Component, inject} from '@angular/core';
+import { CartService} from '../cart.service';
+import {CommonModule} from '@angular/common';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-shipping',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './shipping.html',
-  styleUrls: ['./shipping.css']
+  styleUrl: './shipping.css',
 })
-export class Shipping implements OnInit {
+export class Shipping {
+  private cartService = inject(CartService);
 
-  // Preparamos una variable que será un "flujo" de datos (Observable)
-  shippingCosts!: Observable<{type: string, price: number}[]>;
+  shippingCost!: Observable<{ type: string, price: number}[]>;
 
-  constructor(private cartService: CartService) { }
 
   ngOnInit() {
-    // Le pedimos al servicio que conecte el tubo de datos
-    this.shippingCosts = this.cartService.getShippingPrices();
+    this.shippingCost = this.cartService.getShippingPrices();
   }
 }
