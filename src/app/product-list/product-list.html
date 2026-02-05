@@ -13,6 +13,20 @@
         Description: {{ product.description }}
       </p>
     }
+    @if(product.cantidad > 5){
+      <p style="color: green">
+        Cantidad: {{product.cantidad}}
+      </p>
+    }@else if(product.cantidad <= 5 && product.cantidad > 0){
+      <p style="color: orange">
+        Cantidad: {{product.cantidad}}
+      </p>
+    } @else if(product.cantidad <= 0){
+      <p style="color: red">
+        Cantidad: {{product.cantidad}} ¡Agotado!
+      </p>
+    }
+
 
     <button type="button" (click)="share()">
       Share

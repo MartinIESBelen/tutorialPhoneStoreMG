@@ -5,6 +5,19 @@
     <h3>{{ product.name }}</h3>
     <h4>{{ product.price | currency }}</h4>
     <p>{{ product.description }}</p>
+    @if(product.cantidad > 5){
+      <p style="color: green">
+        Quedan: {{product.cantidad}}
+      </p>
+    }@else if(product.cantidad <= 5 && product.cantidad > 0){
+      <p style="color: orange">
+        Quedan: {{product.cantidad}}
+      </p>
+    } @else if(product.cantidad <= 0){
+      <p style="color: red">
+        Quedan: {{product.cantidad}} ¡Agotado!
+      </p>
+    }
 
     <button type="button" (click)="addToCart(product)">Buy</button>
   </div>

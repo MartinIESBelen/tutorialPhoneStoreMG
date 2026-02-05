@@ -27,7 +27,13 @@ export class ProductDetails {
   }
 
   addToCart(product: Product) {
+    if(product.cantidad === 0){
+      window.alert('Agotado!')
+      return;
+    }
+
     this.cart.addToCart(product)
+    product.cantidad = product.cantidad -1;
     window.alert(`Product added to cart: ${product.id}`);
   }
 }

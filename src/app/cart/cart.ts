@@ -4,6 +4,7 @@ import {CartService} from '../cart.service';
 import {RouterLink} from '@angular/router';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 
+
 @Component({
   selector: 'app-cart',
   standalone: true,
@@ -14,7 +15,6 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 export class Cart {
   private cartService = inject(CartService);
   private formBuilder = inject(FormBuilder);
-
   items = this.cartService.getItems();
 
   checkoutForm = this.formBuilder.group({
@@ -29,6 +29,7 @@ export class Cart {
   }
 
   onSubmit(){
+
     if(this.checkoutForm.invalid){
       this.checkoutForm.markAllAsTouched()
       return;
@@ -36,6 +37,11 @@ export class Cart {
 
     if(this.items.length === 0){
       window.alert('The cart is empty!')
+      return;
+    }
+
+    if(this.items.some(i => i.cantidad ===0)){
+      window.alert('The stock is empty!')
       return;
     }
 
