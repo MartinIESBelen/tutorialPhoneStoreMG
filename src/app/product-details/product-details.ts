@@ -1,39 +1,41 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
-import {CommonModule} from '@angular/common'; //necesario para el pipe de moneda
-import {Product, products} from '../products';
-import {CartService} from '../cart.service';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Product, products } from '../products';
+import { CartService } from '../service/cart.service';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css',
 })
-export class ProductDetails {
-
+export class ProductDetails implements OnInit {
   product: Product | undefined;
 
   private route = inject(ActivatedRoute);
-  private cart = inject(CartService);
+  cartService = inject(CartService);
 
   ngOnInit() {
-    //cogemos la id desde la url
     const routeParams = this.route.snapshot.paramMap;
     const productIdFromRoute = Number(routeParams.get('productId'));
+    this.product = products.find(p => p.id === productIdFromRoute);
 
-    this.product = products.find(product => product.id === productIdFromRoute)
+    if (this.product) {
+      this.cartService.initStock(this.product);
+    }
   }
 
   addToCart(product: Product) {
-    if(product.cantidad === 0){
-      window.alert('Agotado!')
+    const stock = this.cartService.getStock(product.id);
+    if (stock <= 0) {
+      window.alert('¡Agotado!');
       return;
     }
-
-    this.cart.addToCart(product)
-    product.cantidad = product.cantidad -1;
-    window.alert(`Product added to cart: ${product.id}`);
+    const added = this.cartService.addToCart(product);
+    if (added) {
+      window.alert(`Product added to cart: ${product.id}`);
+    }
   }
 }

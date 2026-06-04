@@ -1,30 +1,47 @@
 <h3>Cart</h3>
 
-<p>
+<p class="shipping-link">
   <a [routerLink]="['/shipping']">Shipping Prices</a>
 </p>
 
-<div class="cart-item">
-  @for (item of items; track item.name) {
-    <div class="item-row">
-      <span>{{ item.name }}</span>
-      <span>{{ item.price | currency }}</span>
-    </div>
-  }
+<div class="cart-list">
+  @for (item of items(); track item.product.id) {
+    <div class="cart-item-row">
 
+      <span class="item-name">{{ item.product.name }}</span>
+      <span class="item-price">{{ item.product.price | currency }}</span>
+
+      <div class="quantity-controls">
+        <button class="icon-btn" type="button" (click)="decrease(item.product)">-</button>
+        <span class="quantity-value">{{ item.quantity }}</span>
+        <button class="icon-btn" type="button" (click)="increase(item.product)">+</button>
+      </div>
+
+      <span class="item-subtotal">Subtotal: {{ (item.product.price * item.quantity) | currency }}</span>
+
+    </div>
+  } @empty {
+    <p class="empty-cart-msg">Your cart is empty.</p>
+  }
 </div>
-@if (items.length > 0) {
-  <button type="button" (click)="cleanCart()" style="margin-bottom: 20px;">Clean Cart</button>
+
+@if (items().length > 0) {
+  <div class="cart-summary">
+    <strong>Total: {{ cartService.totalPrice() | currency }}</strong>
+  </div>
+
+  <button class="clean-btn" type="button" (click)="cleanCart()">Clean Cart</button>
 }
 
-<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+<hr class="divider">
 
-  <div>
+<form class="checkout-form" [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
     <label for="name">Name</label>
-    <input id="name" type="text" formControlName="name">
+    <input id="name" type="text" formControlName="name" [class.is-invalid]="checkoutForm.get('name')?.invalid && checkoutForm.get('name')?.touched">
 
     @if (checkoutForm.get('name')?.invalid && checkoutForm.get('name')?.touched) {
-      <div>
+      <div class="error-container">
         @if (checkoutForm.get('name')?.hasError('required')) {
           <span class="error-message">Name is required.</span>
         }
@@ -35,9 +52,9 @@
     }
   </div>
 
-  <div>
+  <div class="form-group">
     <label for="address">Address</label>
-    <input id="address" type="text" formControlName="address">
+    <input id="address" type="text" formControlName="address" [class.is-invalid]="checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched">
 
     @if (checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched) {
       <span class="error-message">Address is required.</span>
@@ -45,5 +62,4 @@
   </div>
 
   <button class="button" type="submit">Purchase</button>
-
 </form>

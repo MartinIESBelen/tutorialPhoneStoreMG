@@ -1,0 +1,21 @@
+@if (supplier()) {
+  <h2>{{ supplier()!.name }}</h2>
+  <p>Contacto: <a [href]="'mailto:' + supplier()!.contact">{{ supplier()!.contact }}</a></p>
+
+  <h3>Productos que vende</h3>
+
+  @if (supplierProducts().length > 0) {
+    @for (product of supplierProducts(); track product.id) {
+      <div>
+        <a [routerLink]="['/products', product.id]">{{ product.name }}</a>
+        <span> — {{ product.price | currency }}</span>
+      </div>
+    }
+  } @else {
+    <p>No hay productos asociados.</p>
+  }
+} @else {
+  <p>Proveedor no encontrado.</p>
+}
+
+<a [routerLink]="['/suppliers']">← Volver a proveedores</a>

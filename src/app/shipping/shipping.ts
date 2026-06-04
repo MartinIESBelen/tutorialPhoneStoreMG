@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import { CartService} from '../cart.service';
+import { CartService} from '../service/cart.service';
 import {CommonModule} from '@angular/common';
 import {Observable} from 'rxjs';
 

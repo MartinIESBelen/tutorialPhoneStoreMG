@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Global Tech", "contact": "contact@global.com" },
+  { "id": 2, "name": "Phone World", "contact": "sales@phoneworld.com" },
+  { "id": 3, "name": "Smart Solutions", "contact": "info@smart.com" }
+]

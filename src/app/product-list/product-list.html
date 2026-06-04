@@ -13,17 +13,17 @@
         Description: {{ product.description }}
       </p>
     }
-    @if(product.cantidad > 5){
+    @if(cartService.getStock(product.id) > 5){
       <p style="color: green">
-        Cantidad: {{product.cantidad}}
+        Cantidad: {{ cartService.getStock(product.id) }}
       </p>
-    }@else if(product.cantidad <= 5 && product.cantidad > 0){
+    } @else if(cartService.getStock(product.id) > 0){
       <p style="color: orange">
-        Cantidad: {{product.cantidad}}
+        Cantidad: {{ cartService.getStock(product.id) }}
       </p>
-    } @else if(product.cantidad <= 0){
+    } @else {
       <p style="color: red">
-        Cantidad: {{product.cantidad}} ¡Agotado!
+        Cantidad: {{ cartService.getStock(product.id) }} ¡Agotado!
       </p>
     }
 
@@ -32,9 +32,12 @@
       Share
     </button>
 
+    <br>
     <app-product-alerts
       [product]="product"
       (notify)="onNotify()">
     </app-product-alerts>
   </div>
+
+  <hr>
 }

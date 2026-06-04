@@ -9,9 +9,7 @@ import {Product} from '../products';
   styleUrl: './product-alerts.css',
 })
 export class ProductAlerts {
-  //Recogemos los productos desde el padre
   @Input()product: Product | undefined;
 
-  //Esto crea la comunicación hacia el padre
   @Output() notify = new EventEmitter();
 }

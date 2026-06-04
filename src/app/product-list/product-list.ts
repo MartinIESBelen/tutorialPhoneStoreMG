@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import {Product, products} from '../products';
+import { Component, inject } from '@angular/core';
+import { Product, products } from '../products';
 import { ProductAlerts } from '../product-alerts/product-alerts';
-import { RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { CartService } from '../service/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -12,12 +13,17 @@ import { RouterLink} from '@angular/router';
 })
 export class ProductList {
   products = [...products];
+  cartService = inject(CartService);
 
-  share(){
-    window.alert('The product has been shared!')
+  constructor() {
+    this.products.forEach(p => this.cartService.initStock(p));
   }
 
-  onNotify(){
-    window.alert('You will be notified when the product goes on sale.')
+  share() {
+    window.alert('The product has been shared!');
+  }
+
+  onNotify() {
+    window.alert('You will be notified when the product goes on sale.');
   }
 }
